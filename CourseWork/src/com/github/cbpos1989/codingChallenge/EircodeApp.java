@@ -14,12 +14,12 @@ import java.util.Scanner;
  */
 public class EircodeApp {
 
-	String eircodes[] = {"D02 Y006","D04 C932", "D15 XR2R", "D03 RR27", "D24 H510","D02 XE81","D02 P656","null","null","null"};
+	StringBuilder eircodes[] = {new StringBuilder("D02 Y006"),new StringBuilder("D04 C932"), new StringBuilder("D15 XR2R"),new StringBuilder( "D03 RR27"),new StringBuilder( "D24 H510"),new StringBuilder("D02 XE81"),new StringBuilder("D02 P656"),new StringBuilder(null),new StringBuilder(null),new StringBuilder(null)};
 
-	String address[] = {"5 Merrion Square North, Dublin 2","10 Burlington Road, Dublin 4","Dunsink Observatory,"
-			+ "Dunsink Lane, Dublin 15","26 Kincora Road, Clontarf, Dublin 3.",
-			"Partas, 4A Brookfield Enterprise Centre, Dublin 24","Hodges Figgis , 56-58 Dawson Street , Dublin 2"
-			,"Central Bank of Ireland , Dame Street , Dublin 2","null","null","null"};
+	StringBuilder address[] = {new StringBuilder("5 Merrion Square North, Dublin 2"),new StringBuilder("10 Burlington Road, Dublin 4"),new StringBuilder("Dunsink Observatory,"
+			+ "Dunsink Lane, Dublin 15"),new StringBuilder("26 Kincora Road, Clontarf, Dublin 3"),
+			new StringBuilder("Partas, 4A Brookfield Enterprise Centre, Dublin 24"),new StringBuilder("Hodges Figgis , 56-58 Dawson Street , Dublin 2")
+			,new StringBuilder("Central Bank of Ireland , Dame Street , Dublin 2"),new StringBuilder(null),new StringBuilder(null),new StringBuilder(null)};
 
 	public static void main(String[] args) {
 		EircodeApp ea = new EircodeApp();
@@ -41,6 +41,7 @@ public class EircodeApp {
 				switch(choice){
 				case 1: System.out.print("Please enter a valid Eircode: ");
 				String temp = scan.nextLine();
+		
 				System.out.print("Eircode Address: " + checkForAddress(temp.toUpperCase(),true));
 				//invalidChoice = false; 
 				break;
@@ -94,14 +95,14 @@ public class EircodeApp {
 					System.out.println("Enter address please : ");
 					String userAddress = scan.nextLine();
 
-					address[i]=userAddress;
+					address[i]= new StringBuilder(userAddress);
 					do{
 						System.out.println("Enter eir code please : ");
 						String userEircode = scan.nextLine();
 						userEircode = userEircode.replaceAll("[^A-Za-z0-9]", "");
 
 						if(userEircode.length() == 7){
-							eircodes[i]=userEircode.toUpperCase();
+							eircodes[i]= new StringBuilder(userEircode.toUpperCase());
 							invalidEircode = false;
 						}else{
 							System.out.println("Enter a valid eircode (7 characters)");
@@ -112,26 +113,26 @@ public class EircodeApp {
 		} while (invalidChoice);
 	}
 
-	String checkForAddress(String str, boolean isEircode){
-		String strNoSpace = str.replaceAll("[^A-Za-z0-9]", "");
-		String strArrayNoSpace = null;
+	StringBuilder checkForAddress(StringBuilder str, boolean isEircode){
+		StringBuilder strNoSpace = str;
+		StringBuilder strArrayNoSpace = null;
 
 		if(isEircode){
 			for (int i = 0; i < eircodes.length; ++i) {
-				strArrayNoSpace = eircodes[i].replaceAll("[^A-Za-z0-9]", "");
+				strArrayNoSpace = eircodes[i];
 
 				if(strArrayNoSpace.equals(strNoSpace)){
 					return address[i];
 				} 
 			}
 
-			return "No valid address found for " + str;
+			return new StringBuilder("No valid address found for " + str);
 
 		} else {
 			for (int i = 0; i < address.length; ++i) {
-				strArrayNoSpace = address[i].replaceAll("[^A-Za-z0-9]", "");
+				strArrayNoSpace = address[i];
 				
-				if(strArrayNoSpace.equalsIgnoreCase(strNoSpace)){
+				if(strArrayNoSpace.equals(strNoSpace)){
 					return eircodes[i];
 				} else if (checkPartialString(strNoSpace, strArrayNoSpace)){
 					return eircodes[i];
@@ -139,16 +140,16 @@ public class EircodeApp {
 
 			}
 
-			return "No valid eircode found for " + str;
+			return new StringBuilder("No valid eircode found for " + str);
 
 		}
 
 	}
 
-	boolean checkPartialString(String subStr, String str){
-		str = str.toUpperCase();
-		String strStart = subStr.substring(0, 5);
-		String strEnd = subStr.substring(subStr.length() -5 , subStr.length());
+	boolean checkPartialString(StringBuilder subStr, StringBuilder str){
+		str = new StringBuilder(str.toUpperCase());
+		StringBuilder strStart = new StringBuilder(subStr.substring(0, 5));
+		StringBuilder strEnd = new StringBuilder(subStr.substring(subStr.length() -5 , subStr.length()));
 	
 		if (str.startsWith(strStart) && str.endsWith(strEnd)) {
 			return true;
